@@ -1,0 +1,33 @@
+<div>
+    <h1> My Portfolio</h1>
+    <div><h2>Money in Wallet ${{getBalance()}}</h2> </div>
+
+    
+    <ngb-alert [dismissible]="false" *ngIf="isEmptyPortfolio()" class="text-center text-dark mx-3"
+    >Currently you don't have any stock.
+    </ngb-alert>
+    <div *ngFor="let info of getLocalStorage()">
+        <div class="card m-3">
+            <div class="card-body card-img-top">
+                <div class="card-title mx-2">{{info.ticker}}</div>
+                <div class="d-flex flex-row mx-auto">
+                    <div class="mx-auto">
+                        <div> Quantity: {{info.quantity}}</div>
+                        <div> Avg. Cost / Share: {{info.avgCost}}</div>
+                        <div> Total Cost: {{info.totalCost}}</div>
+                    </div>
+                    <div>
+                        <div> Change: {{info.avgCost - info.currentPrice}}</div>
+                        <div> Current Price: {{info.currentPrice}}</div>
+                        <div> Market Value: {{info.currentPrice * info.quantity}}</div>
+                        <input type="submit" (click)="openBuyModal(info.ticker, info.currentPrice)">
+                        <input type="submit" (click)="openSellModal(info.ticker, info.currentPrice)">
+                    </div>
+                </div>
+
+
+
+            </div>
+          </div>
+    </div>
+</div>

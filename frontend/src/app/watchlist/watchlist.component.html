@@ -1,0 +1,34 @@
+<div>
+    <h1> My WatchList </h1>
+</div>
+<ngb-alert [dismissible]="false" *ngIf="emptyList" class="text-center text-dark mx-3"
+>Currently you don't have any stock in your watchlist.
+</ngb-alert>
+
+<div *ngIf="!emptyList">
+
+    <div *ngFor="let info of listDetails">
+        <div class="card m-3" (click)="routeToDetails(info.ticker)">
+            <div class="card-body card-img-top d-flex">
+                <div class="card-title mx-2"> 
+                    <h1>
+                        {{info.ticker}}
+                    </h1>
+                    <h2> 
+                        {{ info.name}}
+                    </h2>
+                </div>
+            </div>
+
+            <div>
+                {{info.lastPrice}}
+                {{info.change}}
+                {{info.changePercent}}
+            </div> 
+            <button class="border-0 border-end" (click)="removeItem(info)">
+                <svg xmlns="http://www.w3.org/2000/svg"  width="20" height="20" class="bi bi-x" viewBox="0 0 15 15">
+                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+              </button>
+    </div>    
+</div>

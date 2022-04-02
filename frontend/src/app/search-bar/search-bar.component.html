@@ -1,0 +1,43 @@
+
+
+<form class="mx-auto w-50" [formGroup]="formGrp" id="formSearch" (ngSubmit)="onSubmit(formGrp.value)">
+  <div class="input-group text-center px-2 py-1 rounded"  id="searchBar">
+      <input #input type="text" formControlName = "tickerIn" matInput [matAutocomplete] = "auto" class="form-control d-flex  border-0 m-0" placeholder="Enter stock ticker symbol" aria-label="Search" aria-describedby="search-addon" (input)="changeInput(input.value)" />
+
+      <span class="d-flex input-group-append mx-auto">
+        <button class="border-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+          </svg>
+        </button>
+        <button class="border-0" (click)="clearDetails()">
+          <svg xmlns="http://www.w3.org/2000/svg"  width="20" height="20" class="bi bi-x" viewBox="0 0 15 15">
+            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+          </svg>
+        </button>
+    </span>
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSubmit($event.option.value)">
+      <mat-option *ngIf="isLoading" class="is-loading readonly">
+        <mat-spinner diameter="35">
+        </mat-spinner>
+      </mat-option>
+      <ng-container *ngIf="!isLoading">
+        <mat-option *ngFor="let option of filteredData" [value]="option['symbol']">
+          {{option['symbol']}} | {{option['description']}} 
+        </mat-option>
+
+        <!-- <div *ngFor="let option of filteredData | keyvalue">
+          {{option.key}}:{{option.value}}
+          <mat-option  *ngFor="let i of option.value | keyvalue" [value]="i" type="CommonStock">
+            {{  i.value['symbol'] }} | {{  i.value['description'] }}
+        </mat-option>
+      </div> -->
+        <!-- <mat-option *ngFor="let row of filtered">
+          {{ row}}
+        </mat-option> -->
+      </ng-container>
+
+    </mat-autocomplete>
+
+  </div>
+</form>

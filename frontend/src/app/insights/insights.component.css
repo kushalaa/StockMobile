@@ -1,0 +1,19 @@
+.table-shadow {
+    background-color:#e8ecef;
+}
+
+.table > :not(:first-child) {
+    border-top: 0;
+}
+
+#recTrendsChart {
+    width: 100%; 
+    height: 100%;
+   display: block;
+}
+
+#earningsChart {
+    width: 100%; 
+    height: 100%;
+   display: block;
+}

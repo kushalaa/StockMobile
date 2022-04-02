@@ -1,0 +1,146 @@
+<app-search-wrapper></app-search-wrapper>
+
+<div class="d-flex flex-column mx-auto col-11 col-lg-9" id="flexCol">
+
+    <div class="mx-auto">
+        <mat-spinner *ngIf="isLoading" class="is-loading readonly" diameter="70">
+        </mat-spinner>
+    </div>
+    <ngb-alert *ngIf="inWatchList && starMsg" type="success" class="text-center" (close)="starMsg = ''">
+        {{ ticker}} added to Watchlist.
+    </ngb-alert>
+
+    <ngb-alert *ngIf="!inWatchList && starMsg" type="danger" class="text-center" (close)="starMsg = ''">
+        {{ ticker}} removed from Watchlist.
+    </ngb-alert>
+
+    <div class="d-flex flex-row justify-content-between mx-auto col-12" *ngIf="!isLoading">
+
+        <div class="constantInfo" id="companyDetails">
+            <div id="tickerCurr"> {{tickerProfile.ticker }}
+                <div class="d-inline-flex" (click)="starClicked()">
+                    <svg *ngIf="!inWatchList" xmlns="http://www.w3.org/2000/svg" width="3vw" height="3vh"
+                        fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                        <path
+                            d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z" />
+                    </svg>
+                    <svg *ngIf="inWatchList" xmlns="http://www.w3.org/2000/svg" width="3vw" height="3vh" fill="#FFD700"
+                        class="bi bi-star-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                    </svg>
+                </div>
+
+
+            </div>
+            <h3 id="tickerName"> {{tickerProfile.name }} </h3>
+            <div> {{tickerProfile.exchange }} </div>
+            <div class="d-flex justify-content-start">
+                <div> <input type="submit" [disabled]="!canBuy()" (click)="openBuyModal()"> Buybtn</div>
+                <div class="mx-2">
+
+                    <div> <input type="submit" [disabled]="!canSell()" (click)="openSellModal()">Sell btn</div>
+                </div>
+            </div>
+        </div>
+        <div class="constantInfo" id="companyLogo">
+            <img src={{tickerProfile.logo}} id="logoInfo">
+        </div>
+
+        <div class="constantInfo text-end" id="companyPercentChange">
+            <div>
+                {{tickerQuote.c}}
+            </div>
+            <div>
+                {{tickerQuote.d}} ({{tickerQuote.dp}})
+            </div>
+            <div>
+                {{ currTime | date: "yyyy-MM-dd H:mm:ss":"-0700" }}
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div class="text-center" id="marketInfo">
+        <div *ngIf="marketOpen">
+            Market is Open
+        </div>
+        <div *ngIf="!marketOpen">
+            Market Closed on
+            {{ timeFromQuoteInfo | date: "yyyy-MM-dd H:mm:ss":"-0700" }}
+        </div>
+    </div>
+<!-- <div class="col-11 col-lg-8"> -->
+    <mat-tab-group mat-stretch-tabs>
+        <mat-tab label="Summary">
+            <div class="mt-4 ms-4">
+                <div>
+                    High Price: {{tickerQuote.h}};
+                </div>
+                <div>
+                    Low Price: {{tickerQuote.l}};
+                </div>
+                <div>
+                    Open Price: {{tickerQuote.o}};
+                </div>
+                <div>
+                    Prev. Close: {{tickerQuote.pc}};
+                </div>
+            </div>
+
+            <div>
+                <u>About the company</u>
+            </div>
+
+            <div>
+                IPO Start Date: {{tickerProfile.ipo}}
+            </div>
+            <div>
+                Industy: {{tickerProfile.finnhubIndustry}}
+            </div>
+            <div>
+                Webpage: <a href="{{tickerProfile.weburl}}">{{tickerProfile.weburl}}</a>
+            </div>
+            <div>
+                <div>
+                    Company Peers
+                </div>
+                <a id="peerLinks" *ngFor="let option of tickerPeer" href="search/{{option}}">
+                    {{option}}
+                </a>
+            </div>
+            <div>
+                <highcharts-chart [Highcharts]="highcharts" [options]="chartOptionsSummary" id="summaryChart">
+                </highcharts-chart>
+            </div>
+        </mat-tab>
+        <mat-tab label="Top News">
+            <div class="row">
+                <div class="col-lg-6 col-12" *ngFor="let news of tickerNews">
+                    <div class="card m-3">
+                        <div class="card-body card-img-top d-flex" (click)="openNewsModals(news)">
+                            <img class="img-fluid" src="{{news.image}}" alt="News image"
+                                style="width: 7rem; height: 7rem;">
+                            <div class="card-title mx-2">{{news.headline}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </mat-tab>
+        <mat-tab label="Charts">
+            <div>
+                <highcharts-chart [Highcharts]="highcharts" [options]="highChartOption" id="histChart">
+                </highcharts-chart>
+            </div>
+        </mat-tab>
+        <mat-tab label="Insights">
+
+            <app-insights [ticker]="ticker" [companyName]="tickerProfile.name"></app-insights>
+            
+        </mat-tab>
+    </mat-tab-group>
+</div>
+<!-- </div> -->

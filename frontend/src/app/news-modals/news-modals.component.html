@@ -1,0 +1,51 @@
+<div>
+    <div class="modal-header">
+        <div class="modal-title" id="modal-basic-title">
+            <div class="m-0 fs-3">{{ news.source}}</div>
+            <div class="m-0">
+                <h5>{{ news.dateStr | date: "longDate":"-0700" }}</h5>
+            </div>
+        </div>
+        <button type="button" class="btn-close" aria-label="Close" (click)="newsModalService.dismiss('Cross click')"></button>
+
+
+      
+
+
+    </div>
+    <div class="modal-body">
+        <div class="fs-4">
+          {{news.headline}}
+        </div>
+       <div>
+           {{news.summary}}
+       </div>
+       <div style="color:#818890">For more details click <a class="text-decoration-none" [href]="news.url" target="_blank">here</a></div>
+    </div>
+    <div class="card mx-auto">
+        <div class="card-body">
+          <div class="row">Share</div>
+          <div class="col-6">
+            <a class="m-0 p-0 d-inline-flex twitter-share-button btn btn-social btn-twitter" href="https://twitter.com/intent/tweet?text={{ news.title }}&url={{news.url}}" target="_blank" data-size="large">
+              <i class="m-0 p-0 fa fa-2x fa-twitter"></i> 
+            </a>
+            <div
+              class="m-0 mx-1 p-0 d-inline-flex btn fb-share-button"
+              data-href="https://developers.facebook.com/docs/plugins/"
+              data-layout="button"
+              data-size="large"
+            >
+              <a target="_blank" href="{{ facebookLink }}" class="fb-xfbml-parse-ignore"
+                ><i class="m-0 p-0 fa fa-2x fab fa-facebook-square"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  
+  <!-- <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button> -->
+  
+
+  
+</div>

@@ -1,0 +1,26 @@
+/* button {
+    margin: 0;
+    padding: 0;
+  } */
+/*   
+  mat-icon {
+    margin: 0;
+    padding: 0;
+    color: purple;
+  } */
+
+button {
+    background-color:white;
+    fill:rgba(34,36,171,255); 
+}
+#searchBar {
+      border: solid 0.3em;
+      border-color: rgba(34,36,171,255);
+      border-radius:  50px 50px  50px 50px !important;
+      /* width: 350px; */
+}
+
+#searchImg {
+  width: 1rem;
+  height:  1rem;
+}

@@ -1,0 +1,28 @@
+<div>
+    <div class="modal-header">
+        <div class="modal-title" id="modal-basic-title">
+            <h2 class="m-0">{{ticker}}</h2>
+        </div>
+        <button type="button" class="btn-close" aria-label="Close" (click)="buyModalService.dismiss('Cross click')"></button>
+
+    </div>
+    <div class="modal-body">
+       <div>
+          Current Price: {{currPrice}}
+       </div>
+       <div> Money in Wallet: $ {{getBalance()}}</div>
+    </div>
+
+
+    <input type="number" [(ngModel)]="quantityVal" name="quantity" value="0">
+    <div *ngIf="!quantityValid(quantityVal)" style="color:red">Quantity must be greater than 0!</div>
+    <div *ngIf="!sufficientMoney(currPrice, quantityVal)" style="color:red">Not enough money in wallet!</div>
+    <div class="modal-footer">
+        <div> Total: {{quantityVal * currPrice}} </div>
+        <input type="button" [disabled] ="!quantityValid(quantityVal) || !sufficientMoney(currPrice, quantityVal) || !validInput(quantityVal)"(click)="updateBalance(currPrice, ticker, quantityVal)" (click)="buyModalService.dismiss('Cross click')" > 
+    </div>
+
+  
+  <hr>
+  
+</div>

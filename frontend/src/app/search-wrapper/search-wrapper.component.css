@@ -1,0 +1,26 @@
+#search-title {
+    margin-top: 7vh;
+    margin-bottom: 7vh;
+    /* font-size: 3vw; */
+}
+
+#search {
+    background:transparent;
+    position: relative;
+}
+
+/* @media screen and (max-width: 500px) {
+    #search-title {
+        margin-top: 7vh;
+        margin-bottom: 7vh;
+        font-size: 7rem;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    #search-title {
+        margin-top: 7vh;
+        margin-bottom: 7vh;
+        font-size: 4vw;
+    }
+} */

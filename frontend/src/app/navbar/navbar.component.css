@@ -1,0 +1,19 @@
+nav {
+    background: rgba(34,36,171,255);
+}
+
+.active {
+    border-color: white;
+    border: 2px solid white;
+    border-radius: 10px;
+}
+
+.nav-item {
+    text-align: right;
+    font-size: medium;
+}
+
+.stockSearchHeader {
+    font-size: 3vh;
+    letter-spacing: .1vw
+}
