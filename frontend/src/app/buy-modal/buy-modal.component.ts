@@ -24,7 +24,8 @@ export class BuyModalComponent implements OnInit {
   }
 
   quantityValid(quantity) {
-    if(quantity < 0) {
+    if(quantity <= 0) {
+      console.log("less than");
       return false;
     }
     return true;

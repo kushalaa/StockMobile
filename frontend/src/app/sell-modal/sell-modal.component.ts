@@ -23,7 +23,7 @@ export class SellModalComponent implements OnInit {
   }
 
   quantityValidLess(quantity) {
-    if(quantity < 0) {
+    if(quantity <= 0) {
       return false;
     }
     return true; 
