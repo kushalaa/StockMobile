@@ -11,8 +11,10 @@ export class SummaryChartService {
   public shareSummary = this.contentSummary.asObservable();    
   tickerSummary:string = '';
   constructor(private http: HttpClient, private backendService: BackendCallService) { }
-  getChartsSummary(ticker: string, resolution, from, refresh: boolean) {
+  getChartsSummary(ticker: string, resolution, from, to, refresh: boolean) {
     console.log(ticker);
+    console.log(from);
+    console.log(to);
     console.log("In Charts Summary");
     // console.log(this.newsDetails);
     if(!refresh && this.checkExistsSummary(ticker)) {
@@ -22,7 +24,7 @@ export class SummaryChartService {
 
     console.log("Old ticker");
     console.log(this.tickerSummary);
-    this.backendService.getHistCandles(ticker, resolution, from).subscribe( (data) => {
+    this.backendService.getHistCandles(ticker, resolution, from, to).subscribe( (data) => {
       console.log("subscribed charts summary");
       this.chartDetailsSummary = data;
       this.setValueSummary(data);

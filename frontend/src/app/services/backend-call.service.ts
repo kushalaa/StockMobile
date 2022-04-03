@@ -58,8 +58,8 @@ export class BackendCallService {
     return this.http.get(`${this.uri}/stock_earnings?stockName=`+ticker); // TODO: Error handling  
   }
 
-  getHistCandles(ticker:string, resolution: string, from) {
-    console.log(`${this.uri}/stock_candle?stockName=`+ticker+'&resolution='+resolution+'&from='+ from);
-    return this.http.get(`${this.uri}/stock_candle?stockName=`+ticker+'&resolution='+resolution+'&from='+ from); // TODO: Error handling  
+  getHistCandles(ticker:string, resolution: string, from, to) {
+    console.log(`${this.uri}/stock_candle?stockName=`+ticker+'&resolution='+resolution+'&from='+ from+'&to=' + to);
+    return this.http.get(`${this.uri}/stock_candle?stockName=`+ticker+'&resolution='+resolution+'&from='+ from + '&to=' + to); // TODO: Error handling  
   }
 }

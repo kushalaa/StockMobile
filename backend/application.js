@@ -78,7 +78,7 @@ app.get('/stock_candle', (req, res) => {
   const queryObject = url.parse(req.url, true).query;
   // console.log(queryObject['stockName']);
   // console.log(queryObject['from']);
-  var result = stockCandle(queryObject['stockName'], queryObject['resolution'], queryObject['from']); // verify stock name is empty or not
+  var result = stockCandle(queryObject['stockName'], queryObject['resolution'], queryObject['from'], queryObject['to']); // verify stock name is empty or not
   result.then(function (response) {
     res.send(response.data);
 }).catch(err => console.log(err));
@@ -121,11 +121,11 @@ async function stockProfile(stockName) {
 
 // 4.1.2 Company’s Historical Data
 // FROM TIME should be in seconds
-async function stockCandle(stockName, resolution, fromTime) {
+async function stockCandle(stockName, resolution, fromTime, toTime) {
   const axios = require('axios');
   // console.log('from time');
   // console.log(fromTime);
-  var toTime = Math.floor(new Date().valueOf() / 1000);
+  // var toTime = Math.floor(new Date().valueOf() / 1000);
   var urlName = FINNHUB_ENDPOINT + 'api/v1/stock/candle?' + 'symbol=' + stockName + '&resolution=' + resolution + '&from=' + fromTime + '&to=' + toTime + '&token=' + API_KEY;
   const response = await axios.get(urlName);
   return response;

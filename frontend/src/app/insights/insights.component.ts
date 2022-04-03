@@ -186,18 +186,18 @@ export class InsightsComponent implements OnInit, OnChanges {
           }
         }
       },
-      legend: {
-        align: 'center',
-        x: -30,
-        verticalAlign: 'bottom',
-        y: 30,
-        floating: true,
-        backgroundColor:
-          Highcharts.defaultOptions.legend.backgroundColor || 'white',
-        borderColor: '#CCC',
-        borderWidth: 1,
-        shadow: false
-      },
+      // legend: {
+      //   align: 'center',
+      //   x: -30,
+      //   verticalAlign: 'bottom',
+      //   y: 30,
+      //   floating: true,
+      //   backgroundColor:
+      //     Highcharts.defaultOptions.legend.backgroundColor || 'white',
+      //   borderColor: '#CCC',
+      //   borderWidth: 1,
+      //   shadow: false
+      // },
       tooltip: {
         headerFormat: '<b>{point.x}</b><br/>',
         pointFormat: '{series.name}: {point.y}<br/>'
@@ -264,7 +264,7 @@ export class InsightsComponent implements OnInit, OnChanges {
 
     for(i = 0; i < earnings.length; i++) {
       var surpriseVal = earnings[i].surprise == null ? 0: earnings[i].surprise;
-      categories.push(earnings[i].period + `Surprise:  ${surpriseVal}`);
+      categories.push(earnings[i].period + ` \n Surprise:  ${surpriseVal}`);
       var actualVal = earnings[i].actual == null ? 0: earnings[i].actual; 
       actual.push(actualVal);
       var estVal = earnings[i].estimate == null ? 0: earnings[i].estimate; 
@@ -304,8 +304,7 @@ export class InsightsComponent implements OnInit, OnChanges {
         enabled: false
       },
       tooltip: {
-        headerFormat: '<b>{series.name}</b><br/>',
-        pointFormat: '{point.x} km: {point.y}°C'
+        shared: true
       },
 
       series: [{

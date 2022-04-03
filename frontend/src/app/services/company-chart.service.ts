@@ -12,7 +12,7 @@ export class CompanyChartService {
   tickerVol:string = '';
   constructor(private http: HttpClient, private backendService: BackendCallService) { }
 
-  getChartsVolume(ticker: string, resolution, from) {
+  getChartsVolume(ticker: string, resolution, from, to) {
     console.log("In Charts volume");
     console.log(ticker);
     // console.log(this.newsDetails);
@@ -20,7 +20,7 @@ export class CompanyChartService {
       console.log("check exists charts volume returned");
       return;
     }
-    this.backendService.getHistCandles(ticker, resolution, from).subscribe( (data) => {
+    this.backendService.getHistCandles(ticker, resolution, from, to).subscribe( (data) => {
       console.log("subscribed charts volume");
       this.chartDetailsVolume = data;
       this.setValueVol(data);

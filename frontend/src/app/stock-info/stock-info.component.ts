@@ -11,7 +11,7 @@ import * as Highcharts from 'highcharts/highstock';
 import IndicatorsCore from 'highcharts/indicators/indicators';
 import vbp from 'highcharts/indicators/volume-by-price';
 import { faCropSimple } from '@fortawesome/free-solid-svg-icons';
-import {Subject } from 'rxjs';
+import {from, Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { SellModalComponent } from '../sell-modal/sell-modal.component';
 import  { CompanyProfileService } from "../services/company-profile.service";
@@ -27,6 +27,7 @@ var NUM_SECONDS = 300;
 // declare var require: any;
 // require('highcharts/indicators/indicators')(Highcharts);
 // require('highcharts/indicators/volume-by-price')(Highcharts);
+
 
 @Component({
   selector: 'app-stock-info',
@@ -256,10 +257,11 @@ export class StockInfoComponent implements OnInit {
     dateTwoYears.setFullYear( date.getFullYear() - 2);
     console.log("two years ago");
     console.log(dateTwoYears);
-
+    this.updateCurrTime();
+    var to = Math.floor(this.currTime.valueOf() / 1000);
     var from =Math.floor(dateTwoYears.valueOf() / 1000);
     console.log(from);
-    this.compChartService.getChartsVolume(this.ticker, 'D', from);
+    this.compChartService.getChartsVolume(this.ticker, 'D', from, to);
     // this.backEndService.getHistCandles(this.ticker, 'D', from).subscribe((chartInfo) => {
     //   this.tickerCharts = chartInfo;
     //   console.log(this.tickerCharts);
@@ -269,26 +271,32 @@ export class StockInfoComponent implements OnInit {
   }
 
   getSummaryChartInfo(timeQuote, ticker) {
-      var from;
-      var date = new Date();
       console.log("Summary chart ticker");
       console.log(this.ticker);
+      this.updateCurrTime();
+      var to;
       if(this.marketOpen) {
-        from =Math.floor( date.valueOf()/ 1000);
+        to = this.currTime.valueOf();
+        console.log(new Date(to));
         console.log("in summary chart func open");
-        // console.log(this.ticker);
-        console.log(from);
       } else {
-        from = timeQuote;
+        to = timeQuote * 1000;
         console.log("in summary chart func close");
-        // console.log(this.ticker);
-        console.log(from);
+        console.log(new Date(to));
       }
-      from = from - 21600;
+      var toDate = new Date(to);
+      var fromDate = new Date(to);
+      fromDate.setHours(fromDate.getHours() - 6);
+      var from = fromDate.valueOf();
+      from = Math.floor (from / 1000);
+      to = Math.floor(to/1000);
+      console.log("from date summary");
+      console.log(fromDate);
+      console.log(toDate);
       if(!this.marketOpen) {
-        this.summaryChartService.getChartsSummary(ticker, '5', from, true);
+        this.summaryChartService.getChartsSummary(ticker, '5', from, to, true);
       } else {
-        this.summaryChartService.getChartsSummary(ticker, '5', from, false);
+        this.summaryChartService.getChartsSummary(ticker, '5', from, to, false);
       }
       
       // this.backEndService.getHistCandles(this.ticker, '5', from).subscribe((chartInfo) => {
@@ -349,7 +357,7 @@ export class StockInfoComponent implements OnInit {
       }],   
       legend: {
       enabled: false
-      },       
+      },      
       series: [{
         type: 'line',
         name: 'Stock Price',
@@ -360,8 +368,13 @@ export class StockInfoComponent implements OnInit {
             enabled: false
         },
         threshold: null
-      }
-    ]
+      },
+
+    ],
+    time: {
+      timezoneOffset: 7 * 60
+    },
+
     };
 
   }
