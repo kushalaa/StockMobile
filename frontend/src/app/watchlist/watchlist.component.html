@@ -1,34 +1,72 @@
-<div>
-    <h1> My WatchList </h1>
-</div>
-<ngb-alert [dismissible]="false" *ngIf="emptyList" class="text-center text-dark mx-3"
->Currently you don't have any stock in your watchlist.
-</ngb-alert>
-
-<div *ngIf="!emptyList">
-
-    <div *ngFor="let info of listDetails">
-        <div class="card m-3" (click)="routeToDetails(info.ticker)">
-            <div class="card-body card-img-top d-flex">
-                <div class="card-title mx-2"> 
-                    <h1>
-                        {{info.ticker}}
-                    </h1>
-                    <h2> 
-                        {{ info.name}}
-                    </h2>
+<div class="row">
+    <div class="col-10 col-lg-9 mx-auto mt-5 mb-5 fs-2">
+        My WatchList 
+   </div>
+   <ngb-alert [dismissible]="false" *ngIf="emptyList" class="text-center text-dark col-10 col-lg-9 mx-auto">
+   Currently you don't have any stock in your watchlist.
+   </ngb-alert>
+   
+   <div *ngIf="!emptyList">
+   
+       <div *ngFor="let info of listDetails">
+           <div class="card col-10 col-lg-9 mx-auto mt-3 mb-3" (click)="routeToDetails(info.ticker)">
+            <div class="row">
+                <div class="col-12 text-end">
+                    <button class="border-0 text-end" (click)="removeItem(info)">
+                        <svg xmlns="http://www.w3.org/2000/svg"  width="20" height="20" class="bi bi-x" viewBox="0 0 15 15">
+                          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                      </button>
                 </div>
+
             </div>
 
-            <div>
-                {{info.lastPrice}}
-                {{info.change}}
-                {{info.changePercent}}
-            </div> 
-            <button class="border-0 border-end" (click)="removeItem(info)">
-                <svg xmlns="http://www.w3.org/2000/svg"  width="20" height="20" class="bi bi-x" viewBox="0 0 15 15">
-                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                </svg>
-              </button>
-    </div>    
+               <div class="card-body card-img-top">
+                   <div class="row"> 
+
+                    <div class="col-6">
+                        <div class="col-12 fs-3 m-2 m-lg-3">
+                            {{info.ticker}}
+                       </div>
+                        <div class="col-12 fs-6 m-2 m-lg-3">
+                            {{ info.name}}
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row fs-3 m-2 m-lg-3"> 
+                            <div class="col-12 text-end" [class.text-danger]="info.change < 0" [class.text-success]="info.change > 0">
+                                {{info.lastPrice  | number: "1.2-2"}}
+                            </div>
+                            
+                        </div>
+                        <div class="row fs-6 m-2 m-lg-3">
+
+
+
+
+                            <div class="col-12 text-end" [class.text-danger]="info.change < 0" [class.text-success]="info.change > 0">
+                                    <svg *ngIf="info.change > 0" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                                        <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                                      </svg>
+
+                                      <svg *ngIf="info.change < 0" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                                        <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                                      </svg>                                   
+
+                                
+                                {{info.change |  number: "1.2-2" }} ({{info.changePercent | number: "1.2-2"}}%)
+                            </div>
+                            
+                        </div>
+                            
+    
+                    </div> 
+                   </div>
+               </div>
+   
+
+
+       </div>    
+   </div>   
+</div>
 </div>

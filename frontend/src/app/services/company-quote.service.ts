@@ -22,11 +22,11 @@ export class CompanyQuoteService {
   public share = this.content.asObservable();    
   constructor(private http: HttpClient, private backendService: BackendCallService) { }
 
-  getQuoteVal(ticker: string) {
+  getQuoteVal(ticker: string, refresh: boolean) {
     console.log("In quote");
     console.log(ticker);
     console.log(this.quoteDetails);
-    if(this.checkExists(ticker)) {
+    if(!refresh && this.checkExists(ticker)) {
       console.log("check exists Quote returned");
       return;
     }

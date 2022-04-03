@@ -77,7 +77,7 @@ app.get('/stock_earnings', (req, res) => {
 app.get('/stock_candle', (req, res) => {
   const queryObject = url.parse(req.url, true).query;
   // console.log(queryObject['stockName']);
-  console.log(queryObject['from']);
+  // console.log(queryObject['from']);
   var result = stockCandle(queryObject['stockName'], queryObject['resolution'], queryObject['from']); // verify stock name is empty or not
   result.then(function (response) {
     res.send(response.data);
@@ -123,8 +123,8 @@ async function stockProfile(stockName) {
 // FROM TIME should be in seconds
 async function stockCandle(stockName, resolution, fromTime) {
   const axios = require('axios');
-  console.log('from time');
-  console.log(fromTime);
+  // console.log('from time');
+  // console.log(fromTime);
   var toTime = Math.floor(new Date().valueOf() / 1000);
   var urlName = FINNHUB_ENDPOINT + 'api/v1/stock/candle?' + 'symbol=' + stockName + '&resolution=' + resolution + '&from=' + fromTime + '&to=' + toTime + '&token=' + API_KEY;
   const response = await axios.get(urlName);

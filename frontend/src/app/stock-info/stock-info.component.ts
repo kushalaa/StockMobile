@@ -114,13 +114,26 @@ export class StockInfoComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
       this.portfolioService.initializeWallet(25000);
-      this.isLoading= true;
+      
       this.ticker = params.get('ticker').toUpperCase();
+      this.isLoading= true;
       console.log('ticker name in details: ' + this.ticker);
+      setInterval( () => {
+        if(this.ticker !='' && this.marketOpen) {
+          console.log("Inside Refresh");
+          this.refreshSummary();
+        }
+     }, 4000);
 
-        this.getProfileInfo();
+     setInterval( () => {
+      if(this.ticker !='' && this.marketOpen) {
+        console.log("Inside Refresh");
+        this.updateCurrTime();
+      }
+   }, 15000);
+        // this.getProfileInfo();
         this.presentInList();
-        this.getQuoteInfo();
+        // this.getQuoteInfo();
         this.getPeerInfo();
         this.getNewsInfo();
         this.getChartInfo();
@@ -136,6 +149,12 @@ export class StockInfoComponent implements OnInit {
 
   }
 
+    refreshSummary() {
+
+      this.getProfileInfo();
+      this.getQuoteInfo();
+
+    }
   // checkLoading() {
   //   if(this.tickerProfile == null || this.tickerQuote == null || this.tickerPeer == null || this.tickerNews == null || this.tickerNews.length == 0 || this.tickerCharts)
   // }
@@ -144,7 +163,12 @@ export class StockInfoComponent implements OnInit {
     //   this.tickerProfile = profileInfo;
     //   // this.isLoading= false;
     // });
-    this.companyProfileService.getProfileVal(this.ticker);
+    if(this.marketOpen) {
+      this.companyProfileService.getProfileVal(this.ticker, true);
+    } else {
+      this.companyProfileService.getProfileVal(this.ticker, false);
+    }
+    
   }
 
   getQuoteInfo() {
@@ -156,7 +180,12 @@ export class StockInfoComponent implements OnInit {
     //   this.getSummaryChartInfo(this.tickerQuote['t']);
 
     // });
-    this.compQuoteService.getQuoteVal(this.ticker);
+    if(this.marketOpen) {
+      this.compQuoteService.getQuoteVal(this.ticker, true);
+    } else {
+      this.compQuoteService.getQuoteVal(this.ticker, false);
+    }
+    
 
   }
 
@@ -237,7 +266,12 @@ export class StockInfoComponent implements OnInit {
         console.log(from);
       }
       from = from - 21600;
-      this.summaryChartService.getChartsSummary(ticker, '5', from);
+      if(this.marketOpen) {
+        this.summaryChartService.getChartsSummary(ticker, '5', from, true);
+      } else {
+        this.summaryChartService.getChartsSummary(ticker, '5', from, false);
+      }
+      
       // this.backEndService.getHistCandles(this.ticker, '5', from).subscribe((chartInfo) => {
       //   this.tickerSummaryChart = chartInfo;
       //   console.log(this.tickerSummaryChart);
@@ -301,6 +335,7 @@ export class StockInfoComponent implements OnInit {
         type: 'line',
         name: 'Stock Price',
         data: valuesArr,
+        color: (this.tickerQuote.d > 0 ) ? "var(--bs-success)" : "var(--bs-danger)",
         // Need to add color here
         marker: {
             enabled: false
@@ -528,6 +563,7 @@ openBuyModal() {
   const buyModalRef = this.buyModalService.open(BuyModalComponent);
   buyModalRef.componentInstance.ticker = this.ticker;    
   buyModalRef.componentInstance.currPrice = this.tickerQuote.c;
+  buyModalRef.componentInstance.company = this.tickerProfile.name;
 }
 
 canBuy() {

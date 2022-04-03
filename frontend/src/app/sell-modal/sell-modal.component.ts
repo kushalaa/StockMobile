@@ -10,7 +10,7 @@ export class SellModalComponent implements OnInit {
   quantityVal;
   ticker;
   currPrice;
-  constructor(public buyModalService: NgbActiveModal, private portfolioService : PortfolioServiceService) { }
+  constructor(public sellModalService: NgbActiveModal, private portfolioService : PortfolioServiceService) { }
 
   ngOnInit(): void {
     this.portfolioService.initializeWallet(25000);
@@ -85,7 +85,7 @@ export class SellModalComponent implements OnInit {
           console.log("inside");
           value.totalCost = value.totalCost - (quantityVal * value.avgCost);
           value.quantity -= quantityVal;
-          value.avgCost = (totalPrice/value.quantity);
+          value.avgCost = (value.totalCost/value.quantity);
           console.log(value.totalCost);
         }
         break;

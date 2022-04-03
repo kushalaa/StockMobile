@@ -9,6 +9,7 @@ import { PortfolioServiceService } from '../services/portfolio-service.service';
 export class BuyModalComponent implements OnInit {
   quantityVal;
   ticker;
+  company;
   currPrice;
 
   constructor(public buyModalService: NgbActiveModal, private portfolioService : PortfolioServiceService){ }
@@ -64,6 +65,7 @@ export class BuyModalComponent implements OnInit {
 
     var tickerDetails = {
       ticker: tickerVal,
+      companyName: this.company,
       totalCost: totalPrice,
       avgCost:totalPrice/quantityVal,
       currentPrice: currPrice,

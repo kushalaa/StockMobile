@@ -26,11 +26,11 @@ export class CompanyProfileService {
   ticker: string = '';   
   constructor(private http: HttpClient, private backendService: BackendCallService) { }
 
-  getProfileVal(ticker: string) {
+  getProfileVal(ticker: string, refresh: boolean) {
     console.log("In profile");
     console.log(ticker);
     console.log(this.companyDetails);
-    if(this.checkExists(ticker)) {
+    if(!refresh && this.checkExists(ticker)) {
       console.log("check exists Profile returned");
       return;
     }

@@ -190,7 +190,7 @@ export class InsightsComponent implements OnInit, OnChanges {
         align: 'center',
         x: -30,
         verticalAlign: 'bottom',
-        y: 25,
+        y: 30,
         floating: true,
         backgroundColor:
           Highcharts.defaultOptions.legend.backgroundColor || 'white',

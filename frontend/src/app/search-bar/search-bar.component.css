@@ -24,3 +24,9 @@ button {
   width: 1rem;
   height:  1rem;
 }
+input[type="text"]:focus,
+button:focus {   
+  border-color: none;
+  box-shadow: none;
+  outline: 0 none;
+}

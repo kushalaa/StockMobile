@@ -11,3 +11,19 @@
     /* opacity: 0.2; */
     background-repeat: no-repeat; /* Do not repeat the image */
 }
+
+#page-container {
+  position: relative;
+  min-height: 100vh;
+}
+
+#content-wrap {
+  padding-bottom: 20px;    /* Footer height */
+}
+
+#footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 20px;            /* Footer height */
+}

@@ -1,5 +1,6 @@
-<div class="text-center"> <h2> Social Sentiments</h2></div>
-<div id="tableInsights" class="w-50 text-center mx-auto">
+<div class="text-center fs-2 my-5"> Social Sentiments</div>
+<div class="row  mb-4">
+<div id="tableInsights" class="col-lg-6 text-center mx-auto">
     <table class="table">
         <thead class="table-shadow">
           <tr>
@@ -27,14 +28,27 @@
         </tbody>
       </table>
 </div>
-<div class="d-flex flex-row mx-auto">
-    <div>
-        <highcharts-chart [Highcharts] = "highcharts" [options] = "chartOptionsRec" id="recTrendsChart">
-        </highcharts-chart>
+</div>
+<div class="row mx-auto">
+    <div class="col-lg-6 col-12 mx-auto mb-3">
+
+        <!-- <ng-template matTabContent>
+          <div class="row"> -->
+            <highcharts-chart [Highcharts] = "highcharts" [options] = "chartOptionsRec" id="recTrendsChart">
+            </highcharts-chart>
+          <!-- </div>
+        </ng-template> -->
+
     </div>
     
-    <div>
-        <highcharts-chart [Highcharts] = "highcharts" [options] = "chartOptionsEarnings"  id="earningsChart">
-        </highcharts-chart>
+    <div class="col-lg-6 col-12 mx-auto">
+
+
+        <!-- <ng-template matTabContent>
+          <div class="row"> -->
+            <highcharts-chart [Highcharts] = "highcharts" [options] = "chartOptionsEarnings"  id="earningsChart">
+            </highcharts-chart>
+          <!-- </div>
+        </ng-template> -->
     </div>
 </div>

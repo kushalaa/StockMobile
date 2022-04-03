@@ -11,11 +11,11 @@ export class SummaryChartService {
   public shareSummary = this.contentSummary.asObservable();    
   tickerSummary:string = '';
   constructor(private http: HttpClient, private backendService: BackendCallService) { }
-  getChartsSummary(ticker: string, resolution, from) {
+  getChartsSummary(ticker: string, resolution, from, refresh: boolean) {
     console.log(ticker);
     console.log("In Charts Summary");
     // console.log(this.newsDetails);
-    if(this.checkExistsSummary(ticker)) {
+    if(!refresh && this.checkExistsSummary(ticker)) {
       console.log("check exists charts summary returned");
       return;
     }
