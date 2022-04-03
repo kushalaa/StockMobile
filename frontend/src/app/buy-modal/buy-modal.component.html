@@ -39,7 +39,7 @@
             <div class="col-6 text-end">
 
                 <button class="btn btn-primary btn-success  px-lg-3 px-2 p-1" type="submit"
-                [disabled] ="!quantityValid(quantityVal) || !sufficientMoney(currPrice, quantityVal) || !validInput(quantityVal)"(click)="updateBalance(currPrice, ticker, quantityVal)" (click)="buyModalService.dismiss('Cross click')">Buy</button>
+                [disabled] ="!quantityValid(quantityVal) || !sufficientMoney(currPrice, quantityVal) || !validInput(quantityVal)" (click)="updateBalance(currPrice, ticker, quantityVal)">Buy</button>
             </div>
         </div>
          

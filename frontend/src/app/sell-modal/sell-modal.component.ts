@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit  ,Output, EventEmitter} from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PortfolioServiceService } from '../services/portfolio-service.service';
 @Component({
@@ -10,6 +10,7 @@ export class SellModalComponent implements OnInit {
   quantityVal;
   ticker;
   currPrice;
+  @Output() passEntry2: EventEmitter<any> = new EventEmitter();
   constructor(public sellModalService: NgbActiveModal, private portfolioService : PortfolioServiceService) { }
 
   ngOnInit(): void {
@@ -93,6 +94,7 @@ export class SellModalComponent implements OnInit {
     }
 
     this.portfolioService.setPortfolio(portfolioCollection);
+    this.sellModalService.close('success');
     return balance;
   }
 

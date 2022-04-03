@@ -40,7 +40,7 @@
             <div class="col-6 text-end">
 
                 <button class="btn btn-primary btn-success  px-lg-3 px-2 p-1" type="submit"
-                [disabled] ="!quantityValidLess(quantityVal) || !quantityValidLess(quantityVal) || !existsInPortfolio() || !validInput(quantityVal)"(click)="removeBalance(currPrice, ticker, quantityVal)" (click)="sellModalService.dismiss('Cross click')">Sell</button>
+                [disabled] ="!quantityValidLess(quantityVal) || !quantityValidLess(quantityVal) || !existsInPortfolio() || !validInput(quantityVal)" (click)="removeBalance(currPrice, ticker, quantityVal)">Sell</button>
             </div>
         </div>
          

@@ -10,15 +10,16 @@
 
     </div>
 
-    <div class="row my-5" id="topInfo" *ngIf="!isLoading">
+    <div class="row my-4" id="topInfo" *ngIf="!isLoading">
 
 
         <div class="col-12 my-4">
 
             <div class="row">
 
-                <ngb-alert class="mx-auto col-12 my-4" *ngIf="buyMsg" type="success" class="text-center" (close)="buyMsg = ''">{{ ticker | uppercase }} bought successfully!</ngb-alert>
-                <ngb-alert class="mx-auto col-12 my-4" *ngIf="inWatchList && starMsg" type="success" class="text-center"
+                <ngb-alert class="mx-auto col-12 my-3" *ngIf="buyMsg" type="success" class="text-center" (close)="buyMsg = ''">{{ ticker | uppercase }} bought successfully.</ngb-alert>
+                <ngb-alert class="mx-auto col-12 my-3" *ngIf="sellMsg" type="danger" class="text-center" (close)="sellMsg = ''">{{ ticker | uppercase }} sold successfully.</ngb-alert>
+                <ngb-alert class="mx-auto col-12 my-3" *ngIf="inWatchList && starMsg" type="success" class="text-center"
                 (close)="starMsg = ''">
                 {{ ticker}} added to Watchlist.
             </ngb-alert>

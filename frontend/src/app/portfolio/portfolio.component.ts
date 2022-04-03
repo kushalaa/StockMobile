@@ -1,24 +1,42 @@
 import { Component, OnInit } from '@angular/core';
 import { BackendCallService } from '../services/backend-call.service';
 import { Router } from '@angular/router';
-import {forkJoin } from 'rxjs';
+import {forkJoin, Subject } from 'rxjs';
 import  {IQuoteInfo } from "../models/stockQuoteInfo";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BuyModalComponent } from '../buy-modal/buy-modal.component';
 import { PortfolioServiceService } from '../services/portfolio-service.service';
 import { SellModalComponent } from '../sell-modal/sell-modal.component';
+import { debounceTime } from 'rxjs/operators';
 @Component({
   selector: 'app-portfolio',
   templateUrl: './portfolio.component.html',
   styleUrls: ['./portfolio.component.css']
 })
 export class PortfolioComponent implements OnInit {
-
+  ticker: string;
   quantityVal;
+  private buySuccess = new Subject<string>();
+  private sellSuccess = new Subject<string>(); 
+
+  buyMsg = '';
+  sellMsg = '';
   constructor(private router: Router, private backendCallService: BackendCallService,  private buyModalService: NgbModal, private portfolioService: PortfolioServiceService, private sellModalService: NgbModal) { }
 
   ngOnInit(): void {
     this.portfolioService.initializeWallet(25000);
+    this.buySuccess.subscribe(
+      (message) => (this.buyMsg = message)
+    );
+    this.buySuccess
+      .pipe(debounceTime(5000))
+      .subscribe(() => (this.buyMsg = ''));
+      this.sellSuccess.subscribe(
+        (message) => (this.sellMsg = message)
+      );
+      this.sellSuccess
+        .pipe(debounceTime(5000))
+        .subscribe(() => (this.sellMsg = ''));
     // this.portfolioService.initializePortfolio();
     this.getPortfolioItems();
   }
@@ -73,13 +91,27 @@ getLocalStorage() {
 
   openBuyModal(ticker, currPrice) {
     const buyModalRef = this.buyModalService.open(BuyModalComponent);
-    buyModalRef.componentInstance.ticker = ticker;    
+    buyModalRef.componentInstance.ticker = ticker; 
+    this.ticker = ticker;   
     buyModalRef.componentInstance.currPrice = currPrice;
+    buyModalRef.result.then((recItem) => {
+      // trigger opt alert
+      console.log(recItem);
+      // for buy alert
+      this.buySuccess.next('Message successfully changed.');
+    });
   }
 
   openSellModal(ticker, currPrice) {
     const sellModalRef = this.sellModalService.open(SellModalComponent);
     sellModalRef.componentInstance.ticker = ticker;    
+    this.ticker = ticker;
     sellModalRef.componentInstance.currPrice = currPrice;
+    sellModalRef.result.then((recItem) => {
+      // trigger opt alert
+      console.log(recItem);
+      // for buy alert
+      this.sellSuccess.next('Message successfully changed.');
+    });
   }
 }

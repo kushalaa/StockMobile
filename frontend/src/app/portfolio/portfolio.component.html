@@ -6,6 +6,8 @@
     <div class="mx-auto mb-5 fs-3">Money in Wallet ${{getBalance() | number: "1.2-2"}} </div>
 
     <div>
+    <ngb-alert class="mx-auto" *ngIf="buyMsg" type="success" class="text-center" (close)="buyMsg = ''">{{ ticker | uppercase }} bought successfully.</ngb-alert>
+    <ngb-alert class="mx-auto" *ngIf="sellMsg" type="danger" class="text-center" (close)="sellMsg = ''">{{ ticker | uppercase }} sold successfully.</ngb-alert>
     <ngb-alert [dismissible]="false" *ngIf="isEmptyPortfolio()" class="text-center text-dark"
     >Currently you don't have any stock.
     </ngb-alert>

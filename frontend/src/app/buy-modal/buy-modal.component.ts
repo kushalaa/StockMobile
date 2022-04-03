@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input,Output, EventEmitter } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PortfolioServiceService } from '../services/portfolio-service.service';
 @Component({
@@ -11,7 +11,7 @@ export class BuyModalComponent implements OnInit {
   ticker;
   company;
   currPrice;
-
+  @Output() passEntry: EventEmitter<any> = new EventEmitter();
   constructor(public buyModalService: NgbActiveModal, private portfolioService : PortfolioServiceService){ }
 
   ngOnInit(): void {
@@ -25,7 +25,7 @@ export class BuyModalComponent implements OnInit {
 
   quantityValid(quantity) {
     if(quantity <= 0) {
-      console.log("less than");
+      console.log("less")
       return false;
     }
     return true;
@@ -60,6 +60,7 @@ export class BuyModalComponent implements OnInit {
         value.avgCost = (value.totalCost/value.quantity);
         console.log(value.totalCost);
         this.portfolioService.setPortfolio(portfolioCollection);
+        this.buyModalService.close(tickerDetails);
         return balance;
       }
     }
@@ -75,7 +76,7 @@ export class BuyModalComponent implements OnInit {
 
     portfolioCollection.push(tickerDetails);
     this.portfolioService.setPortfolio(portfolioCollection);
-
+    this.buyModalService.close(tickerDetails);
     return balance;
   }
 

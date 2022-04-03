@@ -53,10 +53,12 @@ export class StockInfoComponent implements OnInit {
   refreshed: boolean = false;
   inWatchList = false;
   private starSuccess = new Subject<string>();
-  private buySuccess = new Subject<string>(); 
+  private buySuccess = new Subject<string>();
+  private sellSuccess = new Subject<string>(); 
   
   starMsg = '';
   buyMsg = '';
+  sellMsg = '';
 
   constructor(private route: ActivatedRoute, private backEndService: BackendCallService,  private newsModalService: NgbModal, private portfolioService: PortfolioServiceService, private buyModalService: NgbModal, private sellModalService: NgbModal, private companyProfileService: CompanyProfileService, private compPeerService: CompanyPeerService, private compQuoteService: CompanyQuoteService, private compNewsService: CompanyNewsService, private compChartService: CompanyChartService, private summaryChartService: SummaryChartService) 
   { 
@@ -165,6 +167,12 @@ export class StockInfoComponent implements OnInit {
           this.buySuccess
             .pipe(debounceTime(5000))
             .subscribe(() => (this.buyMsg = ''));
+            this.sellSuccess.subscribe(
+              (message) => (this.sellMsg = message)
+            );
+            this.sellSuccess
+              .pipe(debounceTime(5000))
+              .subscribe(() => (this.sellMsg = ''));
     });
 
   }
@@ -596,6 +604,12 @@ openBuyModal() {
   buyModalRef.componentInstance.ticker = this.ticker;    
   buyModalRef.componentInstance.currPrice = this.tickerQuote.c;
   buyModalRef.componentInstance.company = this.tickerProfile.name;
+  buyModalRef.result.then((recItem) => {
+    // trigger opt alert
+    console.log(recItem);
+    // for buy alert
+    this.buySuccess.next('Message successfully changed.');
+  });
 }
 
 canBuy() {
@@ -610,6 +624,12 @@ openSellModal() {
   const sellModalRef = this.sellModalService.open(SellModalComponent);
   sellModalRef.componentInstance.ticker = this.ticker;    
   sellModalRef.componentInstance.currPrice = this.tickerQuote.c;
+  sellModalRef.result.then((recItem) => {
+    // trigger opt alert
+    console.log(recItem);
+    // for buy alert
+    this.sellSuccess.next('Message successfully changed.');
+  });
 }
 
 canSell() {
