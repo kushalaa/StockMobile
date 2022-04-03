@@ -114,4 +114,8 @@ getLocalStorage() {
       this.sellSuccess.next('Message successfully changed.');
     });
   }
+
+  getChange(currentPrice ,avgCost) {
+    return Math.floor(currentPrice - avgCost);
+  }
 }

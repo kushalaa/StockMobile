@@ -133,15 +133,15 @@ export class StockInfoComponent implements OnInit {
       this.ticker = params.get('ticker').toUpperCase();
       this.isLoading= true;
       console.log('ticker name in details: ' + this.ticker);
-    //   setInterval( () => {
-    //     if(this.ticker !='' && !this.marketOpen) {
-    //       console.log("Inside Refresh");
-    //       this.refreshSummary();
-    //     }
-    //  }, 15000);
+      setInterval( () => {
+        if(this.ticker !='' && this.marketOpen) {
+          console.log("Inside Refresh");
+          this.refreshSummary();
+        }
+     }, 15000);
 
      setInterval( () => {
-      if(this.ticker !='' && !this.marketOpen) {
+      if(this.ticker !='') {
         console.log("Inside Refresh");
         this.updateCurrTime();
       }
@@ -179,7 +179,7 @@ export class StockInfoComponent implements OnInit {
 
     refreshSummary() {
 
-      this.getProfileInfo();
+      // this.getProfileInfo();
       this.getQuoteInfo();
 
     }
@@ -191,7 +191,7 @@ export class StockInfoComponent implements OnInit {
     //   this.tickerProfile = profileInfo;
     //   // this.isLoading= false;
     // });
-    if(!this.marketOpen) {
+    if(this.marketOpen) {
       this.companyProfileService.getProfileVal(this.ticker, true);
     } else {
       this.companyProfileService.getProfileVal(this.ticker, false);
@@ -208,7 +208,7 @@ export class StockInfoComponent implements OnInit {
     //   this.getSummaryChartInfo(this.tickerQuote['t']);
 
     // });
-    if(!this.marketOpen) {
+    if(this.marketOpen) {
       this.compQuoteService.getQuoteVal(this.ticker, true);
     } else {
       this.compQuoteService.getQuoteVal(this.ticker, false);
@@ -301,7 +301,7 @@ export class StockInfoComponent implements OnInit {
       console.log("from date summary");
       console.log(fromDate);
       console.log(toDate);
-      if(!this.marketOpen) {
+      if(this.marketOpen) {
         this.summaryChartService.getChartsSummary(ticker, '5', from, to, true);
       } else {
         this.summaryChartService.getChartsSummary(ticker, '5', from, to, false);

@@ -52,7 +52,7 @@
                             <div class="row"> Market Value: </div> 
                         </div>
 
-                        <div class="col-6" [class.text-danger]="info.currentPrice - info.avgCost < 0" [class.text-success]="info.currentPrice - info.avgCost > 0">
+                        <div class="col-6" [class.text-danger]="getChange(info.currentPrice, info.avgCost) < 0" [class.text-success]="info.currentPrice - info.avgCost > 0">
                             <div class="row"> 
                                 <div class="col-12 text-end">
                                     <svg *ngIf="info.currentPrice - info.avgCost > 0" xmlns="http://www.w3.org/2000/svg" width="16" height="16"

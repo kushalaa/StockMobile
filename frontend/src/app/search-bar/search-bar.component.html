@@ -2,10 +2,10 @@
 
 <form class="mx-auto w-50" [formGroup]="formGrp" id="formSearch" (ngSubmit)="onSubmit(formGrp.value)">
   <div class="input-group text-center px-2 py-1 rounded"  id="searchBar">
-      <input #input type="text" formControlName = "tickerIn" matInput [matAutocomplete] = "auto" class="form-control d-flex  border-0 m-0" placeholder="Enter stock ticker symbol" aria-label="Search" aria-describedby="search-addon" (input)="changeInput(input.value)" />
+      <input type="text" formControlName = "tickerIn" [matAutocomplete] = "auto" value="formGrp.value" class="form-control d-flex border-0 m-0" placeholder="Enter stock ticker symbol" aria-label="Search" aria-describedby="search-addon" />
 
       <span class="d-flex input-group-append mx-auto">
-        <button class="border-0">
+        <button class="border-0" (click)="onSubmit(formGrp.value)">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-search" viewBox="0 0 16 16">
             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
           </svg>

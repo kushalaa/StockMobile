@@ -15,7 +15,7 @@ import { BackendCallService } from '../services/backend-call.service';
 })
 export class SearchBarComponent implements OnInit {
   filteredData = [];
-  formGrp!: FormGroup;
+  formGrp: FormGroup;
   filtered = [1, 2 ,3];
   private inputs = new Subject<string>();
   ticker: string;
@@ -33,7 +33,7 @@ export class SearchBarComponent implements OnInit {
     this.formGrp = this.buildForm.group({ tickerIn: '' });
     this.formGrp.get('tickerIn')
     .valueChanges.pipe(
-      debounceTime(3000),
+      debounceTime(300), 
       tap(() => (this.isLoading = true)),
       switchMap((value) =>
         this.backEndService
@@ -88,9 +88,11 @@ export class SearchBarComponent implements OnInit {
     
     console.log('ticker name in form: ', this.ticker);
     console.log(this.filteredData);
+    this.filteredData=[];
+    // this.formGrp.reset(this.ticker);
     // TODO: Check how to not lose form data on routing
     this.router.navigateByUrl('search/' + this.ticker);
-    // this.searchForm.reset();
+    
   }
   onSubmitAutocomplete(tickerVal) {
 
@@ -107,6 +109,7 @@ export class SearchBarComponent implements OnInit {
     console.log('ticker clear: ', this.ticker);
     this.router.navigateByUrl('');
     this.filteredData = [];
+    this.isLoading = false;
     console.log(this.filteredData);
     this.formGrp.reset();
     this.isLoading = false;
