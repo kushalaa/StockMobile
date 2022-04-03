@@ -18,9 +18,10 @@ export class SearchBarComponent implements OnInit {
   formGrp!: FormGroup;
   filtered = [1, 2 ,3];
   private inputs = new Subject<string>();
-  ticker!: string;
+  ticker: string;
   isLoading = false;
-
+  validMsg = '';
+  private validTickerSuccess = new Subject<string>();
   constructor(
     private buildForm: FormBuilder,
     private router: Router,
@@ -32,7 +33,7 @@ export class SearchBarComponent implements OnInit {
     this.formGrp = this.buildForm.group({ tickerIn: '' });
     this.formGrp.get('tickerIn')
     .valueChanges.pipe(
-      debounceTime(300),
+      debounceTime(3000),
       tap(() => (this.isLoading = true)),
       switchMap((value) =>
         this.backEndService
@@ -58,6 +59,13 @@ export class SearchBarComponent implements OnInit {
       console.log("Inside init");
       console.log(this.filteredData);
     });
+
+    this.validTickerSuccess.subscribe(
+      (message) => (this.validMsg = message)
+    );
+    this.validTickerSuccess
+      .pipe(debounceTime(5000))
+      .subscribe(() => (this.validMsg = ''));
     // this.backService.getStockProfile('TLSA').subscribe(data => {
     //   this.filteredData = data;
     //   console.log("Inside init");
@@ -72,13 +80,27 @@ export class SearchBarComponent implements OnInit {
     } else {
       this.ticker = tickerData.tickerIn;
     }
+
+    if(this.checkIfTickerEmpty(this.ticker)) {
+      this.validTickerSuccess.next('Message successfully changed.');
+      return;
+    }
+    
     console.log('ticker name in form: ', this.ticker);
     console.log(this.filteredData);
     // TODO: Check how to not lose form data on routing
     this.router.navigateByUrl('search/' + this.ticker);
     // this.searchForm.reset();
   }
+  onSubmitAutocomplete(tickerVal) {
 
+    this.ticker = tickerVal;
+    console.log('ticker name in form: ', this.ticker);
+    console.log(this.filteredData);
+    // TODO: Check how to not lose form data on routing
+    this.router.navigateByUrl('search/' + this.ticker);
+    // this.searchForm.reset();
+  }
   clearDetails() {
     // TODO: Check what else to clear
     this.ticker = '';
@@ -90,6 +112,18 @@ export class SearchBarComponent implements OnInit {
     this.isLoading = false;
   }
 
+  checkIfTickerEmpty(ticker) {
+    console.log(ticker);
+    if(ticker == '') {
+      // this.validTicker = false;
+      console.log("invalid");
+      return true;
+    } else {
+      console.log("valid");
+      // this.validTicker = true;
+      return false;
+    }
+  }
   changeInput(input: string): void {
     input = input.trim();
     if (input) {

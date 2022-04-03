@@ -49,9 +49,13 @@ export class StockInfoComponent implements OnInit {
   timeFromQuoteInfo;
   tickerSummaryChart;
   chartOptionsSummary;
+  refreshed: boolean = false;
   inWatchList = false;
-  private _StarAlertSuccess = new Subject<string>();
+  private starSuccess = new Subject<string>();
+  private buySuccess = new Subject<string>(); 
+  
   starMsg = '';
+  buyMsg = '';
 
   constructor(private route: ActivatedRoute, private backEndService: BackendCallService,  private newsModalService: NgbModal, private portfolioService: PortfolioServiceService, private buyModalService: NgbModal, private sellModalService: NgbModal, private companyProfileService: CompanyProfileService, private compPeerService: CompanyPeerService, private compQuoteService: CompanyQuoteService, private compNewsService: CompanyNewsService, private compChartService: CompanyChartService, private summaryChartService: SummaryChartService) 
   { 
@@ -61,7 +65,15 @@ export class StockInfoComponent implements OnInit {
     );
 
     this.compPeerService.share.subscribe((res) => {
-      this.tickerPeer = res;
+      var filteredPeers =[];
+      for(let value of res) {
+        // value == '' || value.includes('.')
+        if(value == '') {
+          continue;
+        }
+        filteredPeers.push(value);
+      }
+      this.tickerPeer = filteredPeers;
     }
     );
 
@@ -118,33 +130,40 @@ export class StockInfoComponent implements OnInit {
       this.ticker = params.get('ticker').toUpperCase();
       this.isLoading= true;
       console.log('ticker name in details: ' + this.ticker);
-      setInterval( () => {
-        if(this.ticker !='' && this.marketOpen) {
-          console.log("Inside Refresh");
-          this.refreshSummary();
-        }
-     }, 4000);
+    //   setInterval( () => {
+    //     if(this.ticker !='' && !this.marketOpen) {
+    //       console.log("Inside Refresh");
+    //       this.refreshSummary();
+    //     }
+    //  }, 15000);
 
      setInterval( () => {
-      if(this.ticker !='' && this.marketOpen) {
+      if(this.ticker !='' && !this.marketOpen) {
         console.log("Inside Refresh");
         this.updateCurrTime();
       }
    }, 15000);
-        // this.getProfileInfo();
+        this.getProfileInfo();
         this.presentInList();
-        // this.getQuoteInfo();
+        this.getQuoteInfo();
         this.getPeerInfo();
         this.getNewsInfo();
         this.getChartInfo();
         // this.getSummaryChartInfo(this.tickerQuote['t']);
         // for star alert -------
-        this._StarAlertSuccess.subscribe(
+        this.starSuccess.subscribe(
           (message) => (this.starMsg = message)
         );
-        this._StarAlertSuccess
+        this.starSuccess
           .pipe(debounceTime(5000))
           .subscribe(() => (this.starMsg = ''));
+
+          this.buySuccess.subscribe(
+            (message) => (this.buyMsg = message)
+          );
+          this.buySuccess
+            .pipe(debounceTime(5000))
+            .subscribe(() => (this.buyMsg = ''));
     });
 
   }
@@ -163,7 +182,7 @@ export class StockInfoComponent implements OnInit {
     //   this.tickerProfile = profileInfo;
     //   // this.isLoading= false;
     // });
-    if(this.marketOpen) {
+    if(!this.marketOpen) {
       this.companyProfileService.getProfileVal(this.ticker, true);
     } else {
       this.companyProfileService.getProfileVal(this.ticker, false);
@@ -180,7 +199,7 @@ export class StockInfoComponent implements OnInit {
     //   this.getSummaryChartInfo(this.tickerQuote['t']);
 
     // });
-    if(this.marketOpen) {
+    if(!this.marketOpen) {
       this.compQuoteService.getQuoteVal(this.ticker, true);
     } else {
       this.compQuoteService.getQuoteVal(this.ticker, false);
@@ -266,7 +285,7 @@ export class StockInfoComponent implements OnInit {
         console.log(from);
       }
       from = from - 21600;
-      if(this.marketOpen) {
+      if(!this.marketOpen) {
         this.summaryChartService.getChartsSummary(ticker, '5', from, true);
       } else {
         this.summaryChartService.getChartsSummary(ticker, '5', from, false);
@@ -478,11 +497,11 @@ export class StockInfoComponent implements OnInit {
     scrollbar: {
         enabled: true
     },
-    plotOptions: {
-      series: {
-        pointWidth: 3
-      }
-    },
+    // plotOptions: {
+    //   series: {
+    //     pointWidth: 3
+    //   }
+    // },
 
     series: [{
       type: 'candlestick',
@@ -556,7 +575,7 @@ starClicked() {
     );
     localStorage.setItem('watchlist', JSON.stringify(watchlistArrNew));
   }
-  this._StarAlertSuccess.next('Message successfully changed.');
+  this.starSuccess.next('Message successfully changed.');
 }
 
 openBuyModal() {
