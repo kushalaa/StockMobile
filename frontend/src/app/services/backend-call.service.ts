@@ -10,7 +10,7 @@ import { map } from 'rxjs';
 })
 export class BackendCallService {
   dataType: any;
-  uri = 'http://localhost:8050';
+  uri = 'https://stockbackend-346205.wl.r.appspot.com/';
 
   constructor(private http: HttpClient) {}
 

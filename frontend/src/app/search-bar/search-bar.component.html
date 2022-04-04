@@ -44,8 +44,7 @@
 
 <div class="row mt-5">
   <div class="col-lg-9 mx-auto">
-    <ngb-alert class="mx-auto col-12 my-4" *ngIf="validMsg" type="danger" class="text-center"
-    (close)="validMsg = ''">
+    <ngb-alert class="mx-auto col-12 my-4" *ngIf="invalidTicker" type="danger" class="text-center">
     Please enter a valid ticker.
 </ngb-alert>
   </div>

@@ -13,6 +13,7 @@ import vbp from 'highcharts/indicators/volume-by-price';
 import { faCropSimple } from '@fortawesome/free-solid-svg-icons';
 import {from, Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { SellModalComponent } from '../sell-modal/sell-modal.component';
 import  { CompanyProfileService } from "../services/company-profile.service";
 import  { CompanyPeerService } from "../services/company-peer.service";
@@ -68,18 +69,26 @@ export class StockInfoComponent implements OnInit {
   buyMsg = '';
   sellMsg = '';
 
-  constructor(private route: ActivatedRoute, private backEndService: BackendCallService,  private newsModalService: NgbModal, private portfolioService: PortfolioServiceService, private buyModalService: NgbModal, private sellModalService: NgbModal, private companyProfileService: CompanyProfileService, private compPeerService: CompanyPeerService, private compQuoteService: CompanyQuoteService, private compNewsService: CompanyNewsService, private compChartService: CompanyChartService, private summaryChartService: SummaryChartService) 
+  constructor(private route: ActivatedRoute, private router: Router, private backEndService: BackendCallService,  private newsModalService: NgbModal, private portfolioService: PortfolioServiceService, private buyModalService: NgbModal, private sellModalService: NgbModal, private companyProfileService: CompanyProfileService, private compPeerService: CompanyPeerService, private compQuoteService: CompanyQuoteService, private compNewsService: CompanyNewsService, private compChartService: CompanyChartService, private summaryChartService: SummaryChartService) 
   { 
+ 
+  }
+
+  ngOnInit(): void {
+
     this.companyProfileService.share.subscribe( (res) => {
       console.log("THE RESULT IN TICKER PROFILE");
+      // debugger
       this.profileInfoFinish = false;
       console.log(res);
+
       if(res.ticker == '') {
         this.invalidData = true;
         this.ticker = '';
         console.log(this.invalidData);
-        this.clearStateInfo();
+        // this.clearStateInfo();
       } else {
+        // debugger
         this.invalidData = false;
       }
       this.tickerProfile = res;
@@ -158,9 +167,7 @@ export class StockInfoComponent implements OnInit {
         this.addSummaryChart(this.tickerSummaryChart);
       this.dailyChartsFinish = true;
   });
-  }
 
-  ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
       this.portfolioService.initializeWallet(25000);
       
@@ -616,7 +623,9 @@ export class StockInfoComponent implements OnInit {
     this.currTime = Date.now();
   }
 
-  isValidData() {
+  isinValidData() {
+    console.log("IS INVALID DATA");
+    console.log(this.invalidData);
     return this.invalidData;
   }
 
@@ -698,5 +707,15 @@ canSell() {
     }
   }
   return false;
+}
+
+getChange(change) {
+  return change.toFixed(2);
+}
+
+getTicker(option) {
+  
+  var str = 'search/' + option;
+  this.router.navigateByUrl(str);
 }
 }

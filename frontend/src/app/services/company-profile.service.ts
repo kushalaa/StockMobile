@@ -21,6 +21,21 @@ export class CompanyProfileService {
     // shareOutstanding: 16319.44
     weburl: ""
   };
+
+  temp_company_Details: ITickerInfo = {
+    name: "",
+    ticker: "",
+    country: "",
+    currency: "",
+    exchange: "",
+    finnhubIndustry: "",
+    ipo: "",
+    logo: "",
+    // marketCapitalization: 
+    phone: "",
+    // shareOutstanding: 16319.44
+    weburl: ""
+  }; 
   public content = new BehaviorSubject<ITickerInfo>(this.companyDetails);
   public share = this.content.asObservable(); 
   ticker: string = '';   
@@ -34,9 +49,14 @@ export class CompanyProfileService {
       console.log("check exists Profile returned");
       return;
     }
-
+    // debugger
     this.backendService.getStockProfile(ticker).subscribe( (data) => {
+      // debugger
       console.log("subscribed Profile", data);
+      if (Object.keys(data).length == 0){ 
+        // debugger
+        this.setValue(this.temp_company_Details); 
+      }
       this.companyDetails = data;
       this.setValue(data);
       this.ticker = ticker;

@@ -55,7 +55,7 @@ export class NavbarComponent implements OnInit {
     this.ticker = '';
     console.log('ticker clear: ', this.ticker);
 
-    this.clearStateInfo();
+    // this.clearStateInfo();
     this.router.navigateByUrl('');
   }
   clearStateInfo() {

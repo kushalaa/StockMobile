@@ -30,6 +30,7 @@ export class SearchBarComponent implements OnInit {
   ticker: string;
   isLoading = false;
   validMsg = '';
+  invalidTicker = false;
   private routerSubscription = Subscription.EMPTY;
   private validTickerSuccess = new Subject<string>();
   @ViewChild(MatAutocompleteTrigger) autocomplete!: MatAutocompleteTrigger;
@@ -52,6 +53,7 @@ export class SearchBarComponent implements OnInit {
 
     this.routerSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
+        this.invalidTicker = false;
         let tickerSym = this.router.url.split('/')[2]
         tickerSym = tickerSym.toUpperCase();
         if(tickerSym=='HOME') {
@@ -66,6 +68,10 @@ export class SearchBarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.companyProfileService.share.subscribe((data) =>{
+      this.ticker = data.ticker;
+    });
 
     // this.formGrp = this.buildForm.group({ tickerIn: '' });
     this.formGrp.get('tickerIn')
@@ -112,6 +118,7 @@ export class SearchBarComponent implements OnInit {
   }
 
   onSubmit(tickerData) {
+    console.log("on submit called");
     if (tickerData.tickerIn.ticker) {
       this.ticker = tickerData.tickerIn.ticker;
     } else {
@@ -143,6 +150,7 @@ export class SearchBarComponent implements OnInit {
   clearDetails() {
     // TODO: Check what else to clear
     this.ticker = '';
+    this.invalidTicker= false;
     console.log('ticker clear: ', this.ticker);
     this.filteredData = [];
     this.isLoading = false;
@@ -156,9 +164,10 @@ export class SearchBarComponent implements OnInit {
 
   checkIfTickerEmpty(ticker) {
     console.log(ticker);
-    if(ticker == '') {
+    if(ticker == '' ) {
       // this.validTicker = false;
       console.log("invalid");
+      this.invalidTicker = true;
       return true;
     } else {
       console.log("valid");

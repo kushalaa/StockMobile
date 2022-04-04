@@ -98,4 +98,8 @@ export class WatchlistComponent implements OnInit {
   routeToDetails(ticker) {
     this.router.navigateByUrl('search/' + ticker);
   }
+
+  getChange(change) {
+    return change.toFixed(2);
+  }
 }
