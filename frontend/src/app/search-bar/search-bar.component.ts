@@ -1,5 +1,5 @@
 import { ThisReceiver } from '@angular/compiler';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
 import { Observable, Subject, Subscription } from 'rxjs';
@@ -14,6 +14,7 @@ import { BackendCallService } from '../services/backend-call.service';
 import { CompanyEarningsService } from '../services/company-earnings.service';
 import { CompanySentimentsService } from '../services/company-sentiments.service';
 import { CompanyRecService } from "../services/company-rec.service";
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 // import { ITickerInfo } from '../tickerInfo';
 
 @Component({
@@ -31,6 +32,7 @@ export class SearchBarComponent implements OnInit {
   validMsg = '';
   private routerSubscription = Subscription.EMPTY;
   private validTickerSuccess = new Subject<string>();
+  @ViewChild(MatAutocompleteTrigger) autocomplete!: MatAutocompleteTrigger;
   constructor(
     private buildForm: FormBuilder,
     private router: Router,
@@ -120,7 +122,7 @@ export class SearchBarComponent implements OnInit {
       this.validTickerSuccess.next('Message successfully changed.');
       return;
     }
-    
+    this.autocomplete.closePanel();
     console.log('ticker name in form: ', this.ticker);
     console.log(this.filteredData);
     this.filteredData=[];
@@ -142,14 +144,14 @@ export class SearchBarComponent implements OnInit {
     // TODO: Check what else to clear
     this.ticker = '';
     console.log('ticker clear: ', this.ticker);
-
     this.filteredData = [];
     this.isLoading = false;
+    this.validTickerSuccess.next('');
     console.log(this.filteredData);
-    this.formGrp.reset();
-    this.isLoading = false;
-    this.clearStateInfo();
     this.router.navigateByUrl('');
+    this.formGrp.reset();
+    this.clearStateInfo();
+
   }
 
   checkIfTickerEmpty(ticker) {

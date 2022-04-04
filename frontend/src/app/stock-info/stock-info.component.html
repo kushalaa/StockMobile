@@ -11,7 +11,7 @@
     <div class="mx-auto col-11 col-lg-9">
             <div class="d-flex justify-content-center">
 
-                <mat-spinner class="mx-auto" *ngIf="!isValidData()" class="is-loading readonly" diameter="70">
+                <mat-spinner class="mx-auto" *ngIf="!isValidData() && ticker !='' && (!dailyChartsFinish || !histChartsFinish || !profileInfoFinish || !quoteInfoFinish || !newsInfoFinish || !peerInfoFinish)" class="is-loading readonly" diameter="70">
                 </mat-spinner>
               </div>
 

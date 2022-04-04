@@ -17,6 +17,7 @@ import { CompanyRecService } from "../services/company-rec.service";
 })
 export class NavbarComponent implements OnInit {
 
+  searchLinkActiveStatus:string = '';
   constructor(private companyProfileService: CompanyProfileService,
     private router: Router,
     private backEndService: BackendCallService,
@@ -42,9 +43,10 @@ export class NavbarComponent implements OnInit {
     // console.log(ticker);
 
     if(ticker == null || ticker == '') {
+      this.searchLinkActiveStatus = ''
       return '/search/home';
     } 
-
+    this.searchLinkActiveStatus = 'active'
     return 'search/' + ticker;
   }
 

@@ -115,7 +115,7 @@ getLocalStorage() {
     });
   }
 
-  getChange(currentPrice ,avgCost) {
-    return Math.floor(currentPrice - avgCost);
+  getChange(val) {
+    return (val).toFixed(2);
   }
 }
