@@ -1,16 +1,23 @@
 <app-search-wrapper></app-search-wrapper>
 
 <div class="mx-auto col-11 col-lg-9 mt-2" id="flexCol">
+
     <div class="row">
-        <div class="mx-auto col-11 col-lg-9">
-            <mat-spinner *ngIf="isLoading" class="is-loading readonly" diameter="70">
-            </mat-spinner>
+
+    
+    <div class="col-12"  *ngIf="!isValidData()">
+
+      
+    <div class="mx-auto col-11 col-lg-9">
+            <div class="d-flex justify-content-center">
+
+                <mat-spinner class="mx-auto" *ngIf="!isValidData()" class="is-loading readonly" diameter="70">
+                </mat-spinner>
+              </div>
+
         </div>
 
-
-    </div>
-
-    <div class="row my-4" id="topInfo" *ngIf="!isLoading">
+    <div class="row my-4" id="topInfo" *ngIf="!invalidData && (ticker!= '') && (dailyChartsFinish && histChartsFinish && profileInfoFinish && quoteInfoFinish && newsInfoFinish && peerInfoFinish) ">
 
 
         <div class="col-12 my-4">
@@ -273,5 +280,6 @@
         </mat-tab-group>
     </div>
     <!-- </div> -->
-
+    </div>
+</div>
 </div>

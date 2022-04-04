@@ -46,4 +46,10 @@ export class CompanyNewsService {
     }
     return false;
   }
+
+  clearState() {
+    this.ticker = '';
+    this.newsDetails = [];
+    this.setValue(this.newsDetails);
+  }
 }

@@ -43,4 +43,10 @@ export class CompanyEarningsService {
     }
     return false;
   }
+
+  clearState() {
+    this.ticker = '';
+    this.earningsDetails = [];
+    this.setValue(this.earningsDetails);
+  }
 }

@@ -20,6 +20,7 @@ import  { CompanyQuoteService } from "../services/company-quote.service";
 import  { CompanyNewsService } from "../services/company-news.service";
 import { CompanyChartService} from "../services/company-chart.service";
 import { SummaryChartService} from "../services/summary-chart.service";
+import { toJSDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-calendar';
 
 IndicatorsCore(Highcharts);
 vbp(Highcharts);
@@ -49,13 +50,20 @@ export class StockInfoComponent implements OnInit {
   currTime;
   timeFromQuoteInfo;
   tickerSummaryChart;
+  dailyChartsFinish = false;
+  histChartsFinish = false;
+  profileInfoFinish = false;
+  quoteInfoFinish = false;
+  newsInfoFinish = false;
+  peerInfoFinish = false;
+
   chartOptionsSummary;
   refreshed: boolean = false;
   inWatchList = false;
   private starSuccess = new Subject<string>();
   private buySuccess = new Subject<string>();
   private sellSuccess = new Subject<string>(); 
-  
+  invalidData: boolean = false;
   starMsg = '';
   buyMsg = '';
   sellMsg = '';
@@ -63,11 +71,24 @@ export class StockInfoComponent implements OnInit {
   constructor(private route: ActivatedRoute, private backEndService: BackendCallService,  private newsModalService: NgbModal, private portfolioService: PortfolioServiceService, private buyModalService: NgbModal, private sellModalService: NgbModal, private companyProfileService: CompanyProfileService, private compPeerService: CompanyPeerService, private compQuoteService: CompanyQuoteService, private compNewsService: CompanyNewsService, private compChartService: CompanyChartService, private summaryChartService: SummaryChartService) 
   { 
     this.companyProfileService.share.subscribe( (res) => {
+      console.log("THE RESULT IN TICKER PROFILE");
+      this.profileInfoFinish = false;
+      console.log(res);
+      if(res.ticker == '') {
+        this.invalidData = true;
+        this.ticker = '';
+        console.log(this.invalidData);
+        this.clearStateInfo();
+      } else {
+        this.invalidData = false;
+      }
       this.tickerProfile = res;
+      this.profileInfoFinish = true;
     }
     );
 
     this.compPeerService.share.subscribe((res) => {
+      this.peerInfoFinish = false;
       var filteredPeers =[];
       for(let value of res) {
         // value == '' || value.includes('.')
@@ -77,10 +98,13 @@ export class StockInfoComponent implements OnInit {
         filteredPeers.push(value);
       }
       this.tickerPeer = filteredPeers;
+      this.peerInfoFinish = true;
     }
     );
 
     this.compQuoteService.share.subscribe((res) => {
+      this.quoteInfoFinish = false;
+      console.log(res);
       this.tickerQuote = res;
       this.timeFromQuoteInfo = this.tickerQuote['t']*1000;
 
@@ -88,10 +112,12 @@ export class StockInfoComponent implements OnInit {
     //   this.timeFromQuoteInfo = this.tickerQuote['t']*1000;
       this.setMarketOpen(this.tickerQuote['t']*1000);
       this.getSummaryChartInfo(this.tickerQuote['t'], this.tickerQuote.ticker);
+      this.quoteInfoFinish = true;
     }
     );
 
     this.compNewsService.share.subscribe((newsInfo) => {
+      this.newsInfoFinish = false;
       console.log("news Info");
       console.log(newsInfo);
       this.tickerNews = newsInfo;
@@ -107,6 +133,7 @@ export class StockInfoComponent implements OnInit {
         temp_data['dateStr'] = dateNews.toDateString();
         this.tickerNews.push(temp_data);
         total++;
+        this.newsInfoFinish = true;
       }
       // //console.log(newsInfo);
       // //console.log(this.tickerNews);
@@ -115,14 +142,21 @@ export class StockInfoComponent implements OnInit {
     this.compChartService.shareVolume.subscribe((chartInfo) => {
         this.tickerCharts = chartInfo;
         console.log(this.tickerCharts);
-        this.addCharts(this.tickerCharts);
+        this.histChartsFinish = false;
+
+          this.addCharts(this.tickerCharts);
+
+
+        this.histChartsFinish = true;
     });
 
     this.summaryChartService.shareSummary.subscribe((chartInfo) => {
       this.tickerSummaryChart = chartInfo;
       console.log(this.tickerSummaryChart);
+      this.dailyChartsFinish = false;
 
-      this.addSummaryChart(this.tickerSummaryChart);
+        this.addSummaryChart(this.tickerSummaryChart);
+      this.dailyChartsFinish = true;
   });
   }
 
@@ -131,7 +165,8 @@ export class StockInfoComponent implements OnInit {
       this.portfolioService.initializeWallet(25000);
       
       this.ticker = params.get('ticker').toUpperCase();
-      this.isLoading= true;
+      // this.isLoading= true;
+      // this.invalidData = false;
       console.log('ticker name in details: ' + this.ticker);
       setInterval( () => {
         if(this.ticker !='' && this.marketOpen) {
@@ -177,20 +212,27 @@ export class StockInfoComponent implements OnInit {
 
   }
 
-    refreshSummary() {
+  clearStateInfo() {
+    this.compChartService.clearState();
+    this.compNewsService.clearState();
+    this.compPeerService.clearState();
+    this.compQuoteService.clearState();
+    this.summaryChartService.clearState();
+  }
+
+  refreshSummary() {
 
       // this.getProfileInfo();
       this.getQuoteInfo();
 
     }
-  // checkLoading() {
-  //   if(this.tickerProfile == null || this.tickerQuote == null || this.tickerPeer == null || this.tickerNews == null || this.tickerNews.length == 0 || this.tickerCharts)
-  // }
+
   getProfileInfo() {
     // this.backEndService.getStockProfile(this.ticker).subscribe((profileInfo) => {
     //   this.tickerProfile = profileInfo;
     //   // this.isLoading= false;
     // });
+
     if(this.marketOpen) {
       this.companyProfileService.getProfileVal(this.ticker, true);
     } else {
@@ -275,7 +317,7 @@ export class StockInfoComponent implements OnInit {
     //   console.log(this.tickerCharts);
     //   this.addCharts(this.tickerCharts);
     // });
-    this.isLoading= false;
+    // this.isLoading= false;
   }
 
   getSummaryChartInfo(timeQuote, ticker) {
@@ -328,7 +370,13 @@ export class StockInfoComponent implements OnInit {
   }
 
   addSummaryChart(summaryChart) {
-    let valuesArr = [], timeArr=[], dataLen = summaryChart['t'].length;
+    let valuesArr = [], timeArr=[], dataLen;
+
+    if(summaryChart['t']) {
+      dataLen = summaryChart['t'].length; 
+    } else {
+      dataLen = 0;
+    }
 
     for(var i = 0; i < dataLen; i++) {
       var  time = summaryChart['t'][i];
@@ -393,7 +441,7 @@ export class StockInfoComponent implements OnInit {
   //console.log(chart);
   var ohlc = [],
     volume = [],
-    dataLength = chart['t'].length,
+    dataLength,
     // set the allowed units for data grouping
     groupingUnits = [[
       'week',             // unit name
@@ -404,6 +452,11 @@ export class StockInfoComponent implements OnInit {
     ]],
 
     i = 0;
+    if(chart['t']) {
+      dataLength = chart['t'].length; 
+    } else {
+      dataLength = 0;
+    }
   for (i; i < dataLength; i++) {
    var  time = chart['t'][i];
    var timeStp = time * 1000;
@@ -563,6 +616,9 @@ export class StockInfoComponent implements OnInit {
     this.currTime = Date.now();
   }
 
+  isValidData() {
+    return this.invalidData;
+  }
 
 presentInList() {
   let watchlistArr = localStorage.getItem('watchlist') ? JSON.parse(localStorage.getItem('watchlist')) : [];

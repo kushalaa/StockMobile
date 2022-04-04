@@ -26,6 +26,12 @@ export class SummaryChartService {
     console.log(this.tickerSummary);
     this.backendService.getHistCandles(ticker, resolution, from, to).subscribe( (data) => {
       console.log("subscribed charts summary");
+
+
+      if(data['s'] && data['s'] == "no_data") {
+        console.log("no data, nothing else to do");
+        return;
+      }
       this.chartDetailsSummary = data;
       this.setValueSummary(data);
       this.tickerSummary = ticker;
@@ -51,5 +57,10 @@ export class SummaryChartService {
       return true;
     }
     return false;
-  }  
+  } 
+  clearState() {
+    this.tickerSummary = '';
+    this.chartDetailsSummary = [];
+    this.setValueSummary(this.chartDetailsSummary);
+  } 
 }

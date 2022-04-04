@@ -42,5 +42,11 @@ export class CompanyPeerService {
       return true;
     }
     return false;
-  }  
+  } 
+
+  clearState() {
+    this.ticker = '';
+    this.companyPeers= [];
+    this.setValue(this.companyPeers);
+  }
 }

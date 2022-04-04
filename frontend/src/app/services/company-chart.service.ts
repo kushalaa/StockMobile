@@ -22,6 +22,10 @@ export class CompanyChartService {
     }
     this.backendService.getHistCandles(ticker, resolution, from, to).subscribe( (data) => {
       console.log("subscribed charts volume");
+      if(data['s'] && data['s'] == "no_data") {
+        console.log("no data, nothing else to do");
+        return;
+      }
       this.chartDetailsVolume = data;
       this.setValueVol(data);
       this.tickerVol = ticker;
@@ -46,4 +50,9 @@ export class CompanyChartService {
     return false;
   } 
 
+  clearState() {
+    this.tickerVol = '';
+    this.chartDetailsVolume = [];
+    this.setValueVol(this.chartDetailsVolume);
+  }
 }

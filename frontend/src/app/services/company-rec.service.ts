@@ -44,4 +44,10 @@ export class CompanyRecService {
     }
     return false;
   }
+
+  clearState() {
+    this.ticker = '';
+    this.recsDetails = [];
+    this.setValue(this.recsDetails);
+  }
 }

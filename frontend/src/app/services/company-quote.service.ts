@@ -53,4 +53,20 @@ export class CompanyQuoteService {
     }
     return false;
   }
+
+  clearState() {
+    this.quoteDetails.ticker = '';
+    this.quoteDetails = {
+      c: 0, //last price
+      d: 0,// change 
+      dp: 0, // change percent
+      h: 0, // high price
+      l: 0, // low price
+      o: 0, // open price
+      pc: 0, // prev close
+      t: 0, // timestamp
+      ticker: ""
+    };
+    this.setValue(this.quoteDetails); 
+  }
 }

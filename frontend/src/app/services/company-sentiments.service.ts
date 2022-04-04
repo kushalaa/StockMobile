@@ -43,4 +43,10 @@ export class CompanySentimentsService {
     }
     return false;
   }
+
+  clearState() {
+    this.ticker = '';
+    this.sentimentsDetails = [];
+    this.setValue(this.sentimentsDetails);
+  }
 }

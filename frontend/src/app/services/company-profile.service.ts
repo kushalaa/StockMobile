@@ -36,7 +36,7 @@ export class CompanyProfileService {
     }
 
     this.backendService.getStockProfile(ticker).subscribe( (data) => {
-      console.log("subscribed Profile");
+      console.log("subscribed Profile", data);
       this.companyDetails = data;
       this.setValue(data);
       this.ticker = ticker;
@@ -61,5 +61,24 @@ export class CompanyProfileService {
 
   getCurrTicker() {
     return this.ticker;
+  }
+
+  clearState() {
+    this.ticker = '';
+    this.companyDetails = {
+      name: "",
+      ticker: "",
+      country: "",
+      currency: "",
+      exchange: "",
+      finnhubIndustry: "",
+      ipo: "",
+      logo: "",
+      // marketCapitalization: 
+      phone: "",
+      // shareOutstanding: 16319.44
+      weburl: ""
+    };
+    this.setValue(this.companyDetails);
   }
 }

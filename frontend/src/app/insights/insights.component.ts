@@ -29,8 +29,13 @@ export class InsightsComponent implements OnInit, OnChanges {
   // twitterInfo = [];
   ngOnInit(): void {
     this.compEarningsService.share.subscribe((res) => {
+
+      if(this.ticker == '') {
+        this.clearStateInfo();
+      } else {
+        this.createHistoricalChart(this.getESPInfo(res));
+      }
       // this.earningsInfo = res;
-      this.createHistoricalChart(this.getESPInfo(res));
     }
     );
 
@@ -76,7 +81,12 @@ export class InsightsComponent implements OnInit, OnChanges {
       this.getRecommendations();
       this.getEarnings();
   }
-  
+
+  clearStateInfo() {
+    this.compEarningsService.clearState();
+    this.compRecService.clearState();
+    this.compSentimentService.clearState();
+  }
   getInsights() {
     // this.backEndService.getInsights(this.ticker).subscribe((insight) => {
     //   this.positiveMentionsReddit = 0;
